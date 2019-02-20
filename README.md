@@ -4,6 +4,17 @@ Small script to generate certificate requests with altdns names (which is painfu
 ## Installation
 Script requires ruby installed with openssl-support, this is often a seperate package in many linux distributions (libruby-openssl or ruby-openssl).
 
+## usage
+```
+shell> gen-csr.rb -h
+Usage: gen-csr.rb [options]
+    -c, --config CONFIG              Load defaults from specified YAML config-file. (Default: /etc/gen-csr.conf)
+    -n, --name DNSNAME               DNS-names to add to certificate, first will also be used for common-name
+    -s, --keysize SIZE               Keysize for private key (Default: 2048)
+    -o, --output-path DIRECTOY       Path to write certificate + key
+    -w, --add-www                    Prefix www.* to names
+```
+
 ## Examples
 
 Generate certificate with alt-name for mydomain.no and www.mydomain.no
