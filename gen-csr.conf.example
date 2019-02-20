@@ -1,0 +1,5 @@
+country: 'no' # no without quotes equals false :)
+state: Oslo
+locality: Oslo
+organization: Myorg
+orgunit: IT
