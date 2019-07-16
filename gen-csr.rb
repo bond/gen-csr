@@ -36,7 +36,7 @@ OptionParser.new do |opts|
     options.key_size = opt
   end
 
-  opts.on('-o', '--output-path DIRECTOY', 'Path to write certificate + key') do |opt|
+  opts.on('-o', '--output-path DIRECTORY', 'Path to write certificate + key (Default: ~/csr)') do |opt|
     options.output_path = opt
   end
 
