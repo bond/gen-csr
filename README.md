@@ -11,7 +11,7 @@ Usage: gen-csr.rb [options]
     -c, --config CONFIG              Load defaults from specified YAML config-file. (Default: /etc/gen-csr.conf)
     -n, --name DNSNAME               DNS-names to add to certificate, first will also be used for common-name
     -s, --keysize SIZE               Keysize for private key (Default: 2048)
-    -o, --output-path DIRECTOY       Path to write certificate + key
+    -o, --output-path DIRECTORY      Path to write certificate + key (defaults to ~/csr)
     -w, --add-www                    Prefix www.* to names
 ```
 
