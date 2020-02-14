@@ -33,3 +33,11 @@ gen-csr.rb --name domain1.com --name domain2.com
 ```
 shell> for i in router1 router2 router3; do gen-csr.rb --name $i.internal; done
 ```
+
+### Docker support
+```
+cp gen-csr.conf.example gen-csr.conf
+docker build -t gen-csr .
+docker run --rm gen-csr --name myapp.preview.rocks -o > csr.out
+cat csr.out
+```

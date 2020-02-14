@@ -8,11 +8,13 @@ require 'pp'
 
 options = OpenStruct.new
 options.names = []
+options.ips = []
 options.cfg = "/etc/gen-csr.conf"
 options.key_size = 2048
 options.email = nil
 options.output_path = "~/csr"
 options.add_www = false
+options.stdout = false
 
 TIMESTAMP = Time.now.strftime("%FT%R")
 
@@ -42,6 +44,14 @@ OptionParser.new do |opts|
 
   opts.on('-w', '--add-www', 'Prefix www.* to names') do |opt|
     options.add_www = true
+  end
+
+  opts.on('-i', '--ip IPADDR', 'IP-Address to add in certificate') do |opt|
+    options.ips << opt
+  end
+
+  opts.on('--stdout', 'Print output to stderr instead of files') do |opt|
+    options.stdout = true
   end
 
 end.parse!
@@ -89,14 +99,21 @@ rescue Errno::EACCES => e
   exit_error "Could not setup output-directory: #{e}"
 end
 
-puts "Configured options:"
-pp options.to_h
+unless options.stdout
+  puts "Configured options:"
+  pp options.to_h
+end
 
 key = OpenSSL::PKey::RSA.new 2048
 key_file = output_path + "#{options.common_name}-#{TIMESTAMP}.key"
-key_file.open('w') {|f| f.write(key) }
 
-puts "Wrote key: #{key_file}"
+if options.stdout
+  STDOUT.puts(key)
+else
+  key_file.open('w') {|f| f.write(key) }
+  puts "Wrote key: #{key_file}"
+end
+
 
 request_opts = [
   ['C', options.country],
@@ -116,7 +133,7 @@ csr.public_key = key.public_key
 # add additional dns-names?
 extension = OpenSSL::X509::ExtensionFactory.new.create_extension(
   'subjectAltName',
-  options.names.map {|san| "DNS:#{san}"}.join(', '),
+  (options.names.map {|san| "DNS:#{san}"} + options.ips.map {|ip| "IP:#{ip}"}).join(', '),
   false
 )
 csr.add_attribute OpenSSL::X509::Attribute.new(
@@ -127,6 +144,10 @@ csr.add_attribute OpenSSL::X509::Attribute.new(
 csr.sign(key, OpenSSL::Digest::SHA256.new)
 
 csr_file = output_path + "#{options.common_name}-#{TIMESTAMP}.csr"
-csr_file.open('w') {|f| f.write(csr) }
+if options.stdout
+  STDOUT.puts csr
+else
+  csr_file.open('w') {|f| f.write(csr) }
+  puts "Wrote CSR: #{csr_file}"
+end
 
-puts "Wrote CSR: #{csr_file}"
