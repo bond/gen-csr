@@ -17,6 +17,10 @@ Usage: gen-csr.rb [options]
 
 ## Examples
 
+### Generate CSR for mydomain.com (include .www) and IP-Address
+```
+gen-csr.rb --name mydomain.com --add-www --ip 172.16.32.48
+```
 
 ### Generate certificate with alt-name for mydomain.no and www.mydomain.no
 
