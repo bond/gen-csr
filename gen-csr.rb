@@ -27,7 +27,7 @@ OptionParser.new do |opts|
   opts.banner = "Usage: gen-csr.rb [options]"
 
   opts.on('-c', '--config CONFIG', "Load defaults from specified YAML config-file. (Default: /etc/gen-csr.conf)") do |opt|
-    options.cfgfile = opt
+    options.cfg = opt
   end
 
   opts.on('-n', '--name DNSNAME', 'DNS-names to add to certificate, first will also be used for common-name') do |opt|
